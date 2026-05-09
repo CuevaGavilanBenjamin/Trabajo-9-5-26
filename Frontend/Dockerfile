@@ -1,7 +1,7 @@
 # Frontend - Razor Pages
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY . .
+COPY .. ..
 RUN dotnet restore "Frontend/Frontend.csproj"
 RUN dotnet publish "Frontend/Frontend.csproj" -c Release -o /app/publish
 
