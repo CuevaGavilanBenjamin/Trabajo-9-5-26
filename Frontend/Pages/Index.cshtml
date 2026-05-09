@@ -1,0 +1,40 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Pronóstico del clima</h1>
+</div>
+
+@if (Model.Forecasts.Count == 0)
+{
+    <p>No hay datos disponibles.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Temp (°C)</th>
+                <th>Temp (°F)</th>
+                <th>Resumen</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var forecast in Model.Forecasts)
+        {
+            <tr>
+                <td>@forecast.DateFormatted</td>
+                <td>@forecast.TemperatureC</td>
+                <td>@forecast.TemperatureF</td>
+                <td>@forecast.Summary</td>
+                <td>@forecast.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
