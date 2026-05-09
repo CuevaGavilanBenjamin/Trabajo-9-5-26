@@ -1,4 +1,5 @@
 using Trabajo_9_5_26.Models;
+using Npgsql;
 
 namespace Trabajo_9_5_26.Repositories
 {
