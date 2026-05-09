@@ -1,7 +1,7 @@
 # Backend - Trabajo 9-5-26
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY .. .
+COPY . .
 RUN dotnet restore "Trabajo 9-5-26.csproj"
 RUN dotnet publish "Trabajo 9-5-26.csproj" -c Release -o /app/publish
 
