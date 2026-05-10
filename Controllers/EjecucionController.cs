@@ -18,7 +18,8 @@ namespace Trabajo_9_5_26.Controllers
         [HttpGet("/GetWeatherForecast", Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecastViewModel> Get()
         {
-            return _weatherService.GetProcessedForecasts(5);
+            // Quitamos el 5 de adentro de los paréntesis
+            return _weatherService.GetProcessedForecasts();
         }
     }
 }

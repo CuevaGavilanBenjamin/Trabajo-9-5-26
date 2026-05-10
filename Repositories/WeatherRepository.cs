@@ -1,28 +1,51 @@
-using Trabajo_9_5_26.Models;
 using Npgsql;
+using Trabajo_9_5_26.Models;
 
-namespace Trabajo_9_5_26.Repositories
+namespace Trabajo_9_5_26.Repositories // <-- Faltaba el namespace
 {
+    // <-- AQUÍ ESTÁ LA INTERFAZ QUE FALTABA
     public interface IWeatherRepository
     {
-        IEnumerable<WeatherForecast> GetForecasts(int days);
+        IEnumerable<WeatherForecast> GetForecasts();
     }
 
     public class WeatherRepository : IWeatherRepository
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly NpgsqlConnection _connection;
 
-        public IEnumerable<WeatherForecast> GetForecasts(int days)
+        public WeatherRepository(NpgsqlConnection connection)
         {
-            return Enumerable.Range(1, days).Select(index => new WeatherForecast
+            _connection = connection;
+        }
+
+        public IEnumerable<WeatherForecast> GetForecasts()
+        {
+            var forecasts = new List<WeatherForecast>();
+
+            if (_connection.State != System.Data.ConnectionState.Open)
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            }).ToArray();
+                _connection.Open();
+            }
+
+            string sql = "SELECT date, temperature_c, summary FROM weather_forecasts";
+
+            using (var command = new NpgsqlCommand(sql, _connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        forecasts.Add(new WeatherForecast
+                        {
+                            Date = DateOnly.FromDateTime(reader.GetDateTime(0)),
+                            TemperatureC = reader.GetInt32(1),
+                            Summary = !reader.IsDBNull(2) ? reader.GetString(2) : string.Empty
+                        });
+                    }
+                }
+            }
+
+            return forecasts;
         }
     }
 }

@@ -1,12 +1,13 @@
 using Trabajo_9_5_26.Helpers;
 using Trabajo_9_5_26.Models;
-using Trabajo_9_5_26.Repositories;
+using Trabajo_9_5_26.Repositories; // <-- Faltaba este using
 
 namespace Trabajo_9_5_26.Services
 {
     public interface IWeatherService
     {
-        IEnumerable<WeatherForecastViewModel> GetProcessedForecasts(int days);
+        // Quitamos el (int days) porque ya no lo necesitamos
+        IEnumerable<WeatherForecastViewModel> GetProcessedForecasts();
     }
 
     public class WeatherService : IWeatherService
@@ -18,9 +19,11 @@ namespace Trabajo_9_5_26.Services
             _repository = repository;
         }
 
-        public IEnumerable<WeatherForecastViewModel> GetProcessedForecasts(int days)
+        // Quitamos el (int days) aquí también
+        public IEnumerable<WeatherForecastViewModel> GetProcessedForecasts()
         {
-            var rawData = _repository.GetForecasts(days);
+            // Llamamos al repositorio SIN el parámetro days
+            var rawData = _repository.GetForecasts();
 
             return rawData.Select(f => new WeatherForecastViewModel
             {
